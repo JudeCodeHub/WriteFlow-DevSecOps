@@ -1,13 +1,23 @@
 #!/bin/bash
 # ============================================
-# Writeflow Blog Platform - EC2 Setup Script
+# Writeflow Blog Platform - EC2 Setup Script (example)
 # Run this script on a fresh Ubuntu EC2 instance
+#
+# Copy this file to setup.sh, fill in your own
+# database credentials below, then run it.
+# setup.sh is gitignored so your real credentials
+# never get committed.
 # ============================================
 
 set -e
 
 echo "🛤️  Setting up Writeflow Blog Platform..."
 echo "==========================================="
+
+# --- Database credentials (fill these in) ---
+DB_USER="writeflow_user"
+DB_PASSWORD="CHANGE_ME_placeholder_password"
+DB_NAME="writeflow_db"
 
 # --- Update system ---
 echo "📦 Updating system packages..."
@@ -36,11 +46,11 @@ sudo npm install -g pm2
 # --- Configure PostgreSQL ---
 echo "🗄️  Configuring PostgreSQL..."
 sudo -u postgres psql <<EOF
-CREATE USER writeflow_user WITH PASSWORD 'writeflow_pass_2026';
-CREATE DATABASE writeflow_db OWNER writeflow_user;
-GRANT ALL PRIVILEGES ON DATABASE writeflow_db TO writeflow_user;
-\c writeflow_db
-GRANT ALL ON SCHEMA public TO writeflow_user;
+CREATE USER ${DB_USER} WITH PASSWORD '${DB_PASSWORD}';
+CREATE DATABASE ${DB_NAME} OWNER ${DB_USER};
+GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${DB_USER};
+\c ${DB_NAME}
+GRANT ALL ON SCHEMA public TO ${DB_USER};
 EOF
 
 echo "✅ PostgreSQL configured"

@@ -3,6 +3,9 @@ dist/
 .env
 *.log
 
+# Real deploy script (contains live credentials) - use deploy/setup.sh.example as the template
+deploy/setup.sh
+
 # Terraform
 terraform/.terraform/
 terraform/*.tfstate
