@@ -13,26 +13,11 @@ metadata:
 
 ---
 # ---- Database Secret ----
-# In production, use External Secrets Operator or Sealed Secrets.
-# This is base64 encoded for demo purposes.
-# echo -n 'writeflow_user' | base64 → d3JpdGVmbG93X3VzZXI=
-# echo -n 'writeflow_pass_2026' | base64 → d3JpdGVmbG93X3Bhc3NfMjAyNg==
-# echo -n 'writeflow_db' | base64 → d3JpdGVmbG93X2Ri
+# Kept out of this file on purpose — it's applied separately from
+# k8s/db-secret.yaml (gitignored, real values, local machine only).
+# Template: k8s/db-secret.yaml.example
+#   kubectl apply -f k8s/db-secret.yaml -f k8s/writeflow.yaml
 
-apiVersion: v1
-kind: Secret
-metadata:
-  name: writeflow-db-secret
-  namespace: writeflow
-  labels:
-    app.kubernetes.io/part-of: writeflow
-type: Opaque
-data:
-  POSTGRES_USER: d3JpdGVmbG93X3VzZXI=
-  POSTGRES_PASSWORD: d3JpdGVmbG93X3Bhc3NfMjAyNg==
-  POSTGRES_DB: d3JpdGVmbG93X2Ri
-
----
 # ---- EBS StorageClass (gp3) ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -89,7 +74,6 @@ spec:
         app.kubernetes.io/part-of: writeflow
         app.kubernetes.io/component: database
     spec:
-      # Security: don't automount service account token (DB doesn't need K8s API)
       automountServiceAccountToken: false
       tolerations:
         - key: "karpenter.sh/disrupted"
@@ -118,8 +102,8 @@ spec:
           # Security context
           securityContext:
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false # Postgres needs write access
-            runAsNonRoot: false            # Postgres image runs initdb as root then drops
+            readOnlyRootFilesystem: false 
+            runAsNonRoot: false      
           livenessProbe:
             exec:
               command: ["pg_isready", "-U", "writeflow_user", "-d", "writeflow_db"]

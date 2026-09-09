@@ -6,6 +6,9 @@ dist/
 # Real deploy script (contains live credentials) - use deploy/setup.sh.example as the template
 deploy/setup.sh
 
+# Real DB secret (contains live credentials) - use k8s/db-secret.yaml.example as the template
+k8s/db-secret.yaml
+
 # Terraform
 terraform/.terraform/
 terraform/*.tfstate
