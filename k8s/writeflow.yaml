@@ -178,7 +178,7 @@ spec:
               echo "DB is ready!"
       containers:
         - name: backend
-          image: ghcr.io/judecodehub/writeflow-devsecops/writeflow-backend:d0f9d77
+          image: ghcr.io/judecodehub/writeflow-devsecops/writeflow-backend:dbfb0aa
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -285,7 +285,7 @@ spec:
           effect: "NoSchedule"
       containers:
         - name: frontend
-          image: ghcr.io/judecodehub/writeflow-devsecops/writeflow-frontend:d0f9d77
+          image: ghcr.io/judecodehub/writeflow-devsecops/writeflow-frontend:dbfb0aa
           ports:
             - containerPort: 8080
               protocol: TCP
