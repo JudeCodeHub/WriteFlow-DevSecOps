@@ -12,12 +12,6 @@ metadata:
     app.kubernetes.io/part-of: writeflow
 
 ---
-# ---- Database Secret ----
-# Kept out of this file on purpose — it's applied separately from
-# k8s/db-secret.yaml (gitignored, real values, local machine only).
-# Template: k8s/db-secret.yaml.example
-#   kubectl apply -f k8s/db-secret.yaml -f k8s/writeflow.yaml
-
 # ---- EBS StorageClass (gp3) ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -324,10 +318,6 @@ spec:
             periodSeconds: 5
 
 ---
-# ---- Frontend Service (NodePort — for access via port-forward or node IP) ----
-# NOTE: Changed from LoadBalancer because this AWS account does not support
-# creating load balancers. Use `kubectl port-forward svc/writeflow-frontend 8080:80 -n writeflow`
-# to access the frontend locally.
 apiVersion: v1
 kind: Service
 metadata:

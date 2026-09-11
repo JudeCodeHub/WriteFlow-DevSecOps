@@ -19,10 +19,21 @@ permissions:
 
 env:
   DOCKER_REGISTRY: ghcr.io
-  BACKEND_IMAGE: ghcr.io/${{ github.repository }}/writeflow-backend
-  FRONTEND_IMAGE: ghcr.io/${{ github.repository }}/writeflow-frontend
 
 jobs:
+  # ==============================================================
+  # STAGE 0: Compute lowercase image repo (GHCR requires lowercase)
+  # ==============================================================
+  prep:
+    name: "⚙️ Prepare"
+    runs-on: ubuntu-latest
+    outputs:
+      image_repo: ${{ steps.repo.outputs.lower }}
+    steps:
+      - name: Lowercase repository name
+        id: repo
+        run: echo "lower=${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+
   # ==============================================================
   # STAGE 1: Linting
   # ==============================================================
@@ -89,7 +100,7 @@ jobs:
   build:
     name: "🐳 Build ${{ matrix.component }}"
     runs-on: ubuntu-latest
-    needs: sca
+    needs: [sca, prep]
     permissions:
       contents: read
       packages: write # Needed to push to GHCR
@@ -114,7 +125,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}/writeflow-${{ matrix.component }}
+          images: ghcr.io/${{ needs.prep.outputs.image_repo }}/writeflow-${{ matrix.component }}
           tags: |
             type=sha,prefix=
             type=ref,event=branch
@@ -220,7 +231,8 @@ jobs:
   update-manifest:
     name: "🚀 Update K8s Manifest"
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' 
+    if: github.event_name == 'push'
+    needs: [build, prep]
     permissions:
       contents: write # Needed to push manifest changes
     steps:
@@ -236,6 +248,8 @@ jobs:
       - name: Update K8s manifest with new image tags
         run: |
           IMAGE_TAG=${{ steps.sha.outputs.short }}
+          BACKEND_IMAGE="ghcr.io/${{ needs.prep.outputs.image_repo }}/writeflow-backend"
+          FRONTEND_IMAGE="ghcr.io/${{ needs.prep.outputs.image_repo }}/writeflow-frontend"
 
           # Find the line number of the backend container image
           # (the image: line right after `- name: backend`)
