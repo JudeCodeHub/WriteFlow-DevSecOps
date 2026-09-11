@@ -10,8 +10,11 @@ FROM node:24-alpine AS production
 # Security: run as non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Security: remove unnecessary packages
-RUN apk --no-cache add dumb-init=1.2.5-r4
+# Security: apply latest OS security patches, then add only what's needed
+RUN apk upgrade --no-cache && apk --no-cache add dumb-init=1.2.5-r4
+
+# Security: patch npm's bundled tar (CVE-2026-73566)
+RUN npm install -g npm@latest
 
 WORKDIR /app
 
