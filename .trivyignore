@@ -1,0 +1,7 @@
+# CVE-2026-73566: node-tar DoS via crafted long-path tar archive.
+# This is npm's own internally bundled tar, not a project dependency
+# (confirmed: no "tar" entry in backend/package-lock.json).
+# No fix available yet even in the latest npm release as of 2026-09-11.
+# Risk accepted: only exercised by `npm install`/`npm ci` at image build
+# time, never invoked by the running application.
+CVE-2026-73566

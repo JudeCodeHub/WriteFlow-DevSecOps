@@ -175,6 +175,7 @@ jobs:
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH"
           timeout: "10m"
+          trivyignores: ".trivyignore"
 
   # ==============================================================
   # STAGE 5: IaC Security Scan (Checkov) — Terraform + K8s
