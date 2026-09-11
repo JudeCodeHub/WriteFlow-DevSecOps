@@ -7,15 +7,15 @@ services:
     container_name: writeflow-db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: writeflow_user
-      POSTGRES_PASSWORD: writeflow_pass_2026
-      POSTGRES_DB: writeflow_db
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U writeflow_user -d writeflow_db"]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -34,11 +34,11 @@ services:
     restart: unless-stopped
     environment:
       PORT: "5000"
-      DB_USER: writeflow_user
-      DB_PASSWORD: writeflow_pass_2026
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: db
       DB_PORT: "5432"
-      DB_NAME: writeflow_db
+      DB_NAME: ${DB_NAME}
     expose:
       - "5000"
     depends_on:

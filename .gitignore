@@ -29,3 +29,7 @@ Thumbs.db
 coverage/
 *.pyc
 __pycache__/
+
+*.pem
+
+.vscode
