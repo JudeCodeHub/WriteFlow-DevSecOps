@@ -1,7 +1,20 @@
-# CVE-2026-73566: node-tar DoS via crafted long-path tar archive.
-# This is npm's own internally bundled tar, not a project dependency
-# (confirmed: no "tar" entry in backend/package-lock.json).
-# No fix available yet even in the latest npm release as of 2026-09-11.
+# The following are all bundled INSIDE npm itself
+# (/usr/local/lib/node_modules/npm/node_modules/...), confirmed via direct
+# filesystem inspection of the built image — not project dependencies
+# (backend/package-lock.json has no "tar"/"brace-expansion"/"ip-address"
+# entries reachable by `npm ci --only=production`).
+# No fixed npm release available yet as of 2026-09-11.
 # Risk accepted: only exercised by `npm install`/`npm ci` at image build
 # time, never invoked by the running application.
+
+# node-tar DoS via crafted long-path tar archive
 CVE-2026-73566
+
+# brace-expansion DoS via memory exhaustion in expand()
+CVE-2026-14257
+
+# brace-expansion DoS via unbounded intermediate arrays
+CVE-2026-69152
+
+# ip-address inconsistent parsing leading to SSRF
+CVE-2026-69192
