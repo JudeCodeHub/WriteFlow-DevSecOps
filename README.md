@@ -11,6 +11,12 @@ A full-stack blog platform built with a 3-tier architecture — React frontend, 
 
 ---
 
+## 📊 Overview Diagram
+
+![Writeflow Architecture Diagram](assets/Diagram.png)
+
+---
+
 ## ✨ Features
 
 - 📝 Create blog posts with emoji vibes
