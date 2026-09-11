@@ -1,6 +1,7 @@
 skip-check:
   - CKV_AWS_39   # Public access to EKS endpoint (needed for kubectl)
   - CKV_AWS_58   # EKS public endpoint (intentional for dev access)
+  - CKV_TF_1     # Module sources use registry + version constraint, not commit SHA (trusted, actively-maintained terraform-aws-modules)
 soft-fail: false
 framework:
   - terraform
